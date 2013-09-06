@@ -255,6 +255,8 @@ public class GameObject {
      */
     public void draw(GL2 gl) {
         
+    	//
+    	
         // don't draw if it is not showing
         if (!amShowing) {
             return;
