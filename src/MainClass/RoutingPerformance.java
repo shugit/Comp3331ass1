@@ -1,5 +1,5 @@
+package MainClass;
 
-import java.io.*;
 /**
  * argu[3]:SHP/SDP/LLP,TOPOLOGY_FILE,WORKLOAD_FILE
  * TOPOLOGY: A B 10 19 = A和B之间,10ms延迟,最大19个同事虚拟电路
@@ -19,14 +19,24 @@ import java.io.*;
  *
  */
 public class RoutingPerformance {
-	public static boolean debug = true;
+	public static boolean debug = false;
 	public static void main(String[] args) throws Exception{
-		String protocal = args[0];
+		String protocol = args[0];
 		Topology topology = new Topology(args[1]);
 		Workload workload = new Workload(args[2]);
 		
-		
-		
+		if(protocol.equals("SHP")){
+			SHP shp = new SHP(topology,workload);	
+			shp.run();
+		} else if(protocol.equals("SDP")) {
+			SDP sdp = new SDP(topology,workload);
+			sdp.run();
+		} else if (protocol.equals("LLP")) {
+			LLP llp = new LLP(topology,workload);
+			llp.run();
+		} else {
+			System.err.println("Wrong protocal name "+ args[0]);
+		}
 		
 	}
 }

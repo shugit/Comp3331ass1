@@ -1,3 +1,4 @@
+package MainClass;
 
 public class SHP  extends BasicProtocol{
 	/**

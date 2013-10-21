@@ -1,3 +1,5 @@
+package MainClass;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,7 +8,7 @@ import java.util.ArrayList;
 
 public class Topology {
 	private int[][][] array2d = new int[26][26][2];
-	
+
 	private int[][] currentLoad = new int[26][26];
 	private ArrayList<String> nodes;
 	boolean debug = RoutingPerformance.debug;
@@ -33,15 +35,14 @@ public class Topology {
 			 * System.out.println("ascii: "+asciiA+" for "+a);
 			 * System.out.println("ascii: "+asciiB+" for "+b);
 			 */
-			array2d[((int) words[0].charAt(0)) - 65][((int) words[1].charAt(0)) - 65][0] = Integer
-					.parseInt(words[2]);
-			array2d[((int) words[1].charAt(0)) - 65][((int) words[0].charAt(0)) - 65][0] = Integer
-					.parseInt(words[2]);
-			array2d[((int) words[0].charAt(0)) - 65][((int) words[1].charAt(0)) - 65][1] = Integer
-					.parseInt(words[3]);
-			array2d[((int) words[1].charAt(0)) - 65][((int) words[0].charAt(0)) - 65][1] = Integer
-					.parseInt(words[3]);
-			
+			int i = StringToInt(words[0], words[1])[0];
+			int j = StringToInt(words[0], words[1])[1];
+
+			array2d[i][j][0] = Integer.parseInt(words[2]);
+			array2d[j][i][0] = Integer.parseInt(words[2]);
+			array2d[i][j][1] = Integer.parseInt(words[3]);
+			array2d[j][i][1] = Integer.parseInt(words[3]);
+
 			counta++;
 			line = br.readLine();
 		}
@@ -70,11 +71,35 @@ public class Topology {
 	 * @return eg "330"
 	 */
 	public int getDelay(String a, String b) {
-		if (array2d[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65][0] == 0) {
-			if(debug) System.err.println("path Between "+a+" and "+b+" not exists");
+		int i = StringToInt(a, b)[0];
+		int j = StringToInt(a, b)[1];
+		if (array2d[i][j][0] == 0) {
+			if (debug)
+				System.err.println("path Between " + a + " and " + b
+						+ " not exists");
 			return 0;
 		}
-		return array2d[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65][0];
+		return array2d[i][j][0];
+	}
+
+	/**
+	 * make smaller char return as 0, lager return as 1
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	static public int[] StringToInt(String a, String b) {
+		int[] r = new int[2];
+		int i = ((int) a.charAt(0)) - 65;
+		int j = ((int) b.charAt(0)) - 65;
+		if (i > j) { // I = B, J = A
+			r[0] = j;
+			r[1] = i;
+		}
+		r[0] = i;
+		r[1] = j;
+		return r;
 	}
 
 	/**
@@ -86,47 +111,60 @@ public class Topology {
 	 * @return eg."40"
 	 */
 	public int getCapacity(String a, String b) {
-		if (array2d[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65][1] == 0) {
-			if(debug) System.err.println("path Between "+a+" "+b+" not exists");
+		int i = StringToInt(a, b)[0];
+		int j = StringToInt(a, b)[1];
+		if (array2d[i][j][1] == 0) {
+			if (debug)
+				System.err.println("path Between " + a + " " + b
+						+ " not exists");
 			return 0;
 		}
-		return array2d[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65][1];
-	}
-	
-	public void clearAllLoad(){
-		for(int i = 0; i<26; i++){
-			for(int j = 0; j<26; j++){
-				currentLoad[i][j] = 0;
-			}
-		}		
+		return array2d[i][j][1];
 	}
 
-	public void setCurrentLoad(int l,String a, String b){
-		if(array2d[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65][1] != 0){
-			this.currentLoad[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65] = l;
-		} else {
-			if(debug) System.err.println("path Between "+a+" "+b+" not exists");
+	public void clearAllLoad() {
+		for (int i = 0; i < 26; i++) {
+			for (int j = 0; j < 26; j++) {
+				currentLoad[i][j] = 0;
+			}
 		}
 	}
-	public int getCurrentLoad(String a, String b){
-		if(array2d[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65][1] == 0){
-			if(debug) System.err.println("path Between "+a+" "+b+" not exists");
+
+	public void setCurrentLoad(int l, String a, String b) {
+		int i = StringToInt(a, b)[0];
+		int j = StringToInt(a, b)[1];
+		if (array2d[i][j][1] != 0) {
+			this.currentLoad[i][j] = l;
+		} else {
+			if (debug)
+				System.err.println("path Between " + a + " " + b
+						+ " not exists");
+		}
+	}
+
+	public int getCurrentLoad(String a, String b) {
+		int i = StringToInt(a, b)[0];
+		int j = StringToInt(a, b)[1];
+		if (array2d[i][j][1] == 0) {
+			if (debug)
+				System.err.println("path Between " + a + " " + b
+						+ " not exists");
 			return 0;
 		}
-		return currentLoad[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65];
+		return currentLoad[i][j];
 	}
-	
-	public boolean isOverCapacity(String a,String b){
-		if(getCurrentLoad(a,b) <= getCapacity(a,b)){
+
+	public boolean isOverCapacity(String a, String b) {
+		if (getCurrentLoad(a, b) <= getCapacity(a, b)) {
 			return true;
 		}
 		return false;
 	}
-	public void add1toCurrentLoad(String a, String b){
-		setCurrentLoad(getCurrentLoad(a,b)+1, a, b);
+
+	public void add1toCurrentLoad(String a, String b) {
+		setCurrentLoad(getCurrentLoad(a, b) + 1, a, b);
 	}
-	
-	
+
 	public ArrayList<String> getNeibors(String a) {
 		ArrayList<String> r = new ArrayList<String>();
 		int ascii = ((int) a.charAt(0)) - 65;
@@ -140,7 +178,10 @@ public class Topology {
 	}
 
 	public boolean isNeibors(String a, String b) {
-		if (array2d[((int) a.charAt(0)) - 65][((int) b.charAt(0)) - 65][0] != 0) {
+		int i = StringToInt(a, b)[0];
+		int j = StringToInt(a, b)[1];
+
+		if (array2d[i][j][0] != 0) {
 			return true;
 		}
 		return false;

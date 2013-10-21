@@ -1,35 +1,53 @@
-import static org.junit.Assert.*;
+package MainClass;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.junit.Test;
 
+import HelperClass.Request;
+
 public class TestCase {
 
-	public void testOn1() throws Exception {
-		Topology topo = new Topology("t1");
-		Workload work = new Workload("w1");
-	}
-
 	@Test
-	public void testOn3() throws Exception {
+	public void testOn7() throws Exception {
 		Topology topo = new Topology("topology.txt");
-		Workload work = new Workload("w3");
-		SHP s = new SHP(topo, work);
-		s.runAll();		
+		Workload work = new Workload("workload.txt");
+		// SHP s = new SHP(topo, work);
+		// s.run();
+		LLP s2 = new LLP(topo, work);
+		s2.run();
+		// PASSED 5749 failed 135
 	}
-	
-	
-	
+	@Test
 	public void testOn5() throws Exception {
 		Topology topo = new Topology("topology.txt");
 		Workload work = new Workload("workload.txt");
 		SDP s = new SDP(topo, work);
-		s.runAll();	
-			
+		s.run();
+		/*
+		 * total number of virtual circuit requests: 5884 number of successfully
+		 * routed requests: 5310 percentage of successfully routed request:
+		 * 90.24 number of blocked requests: 574 percentage of blocked requests:
+		 * 9.76 average number of hops per circuit: 3.43 average cumulative
+		 * propagation delay per circuit: 141.99
+		 */
 	}
+	@Test
+	public void testOn6() throws Exception {
+		Topology topo = new Topology("topology.txt");
+		Workload work = new Workload("workload.txt");
+		SHP s = new SHP(topo, work);
+		s.run();
+		/*
+		 * total number of virtual circuit requests: 5884 number of successfully
+		 * routed requests: 5102 percentage of successfully routed request:
+		 * 86.71 number of blocked requests: 782 percentage of blocked requests:
+		 * 13.29 average number of hops per circuit: 2.71 average cumulative
+		 * propagation delay per circuit: 173.35
+		 */
+
+	}
+
 	public void testOn4() throws Exception {
 		Topology topo = new Topology("topology.txt");
 		Workload work = new Workload("w2");
@@ -49,11 +67,7 @@ public class TestCase {
 		System.out.println("----------------");
 		re.print();
 	}
-	
-	
-	
-	
-	
+
 	public void testOn2() throws Exception {
 		Topology topo = new Topology("topology.txt");
 		Workload work = new Workload("w2");
