@@ -37,9 +37,18 @@ public class Runner {
         GameEngine ge = new GameEngine(new Camera());
         GameObject go = new GameObject(GameObject.ROOT);
         PolygonalGameObject o = new PolygonalGameObject(go, points, color, color2);
-        go.rotate(30);
-        go.translate(1.2, 3.4);
-        go.scale(1);
+        o.rotate(180);
+        o.translate(1.2, 7);
+        o.scale(1);
+
+        double[] color3 = {0,0,1}; //green
+        double[] points2 = {0,0,1,1,1,0,0,1};
+        PolygonalGameObject o2 = new PolygonalGameObject(o, points2, color3, color3);
+        o2.scale(2);
+        o2.translate(-10, 12);
+        //go.rotate(75);
+        
+        
         panel1.addMouseListener(Mouse.theMouse);
         panel1.addGLEventListener(ge);
         panel1.setFocusable(true);

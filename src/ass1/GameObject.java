@@ -255,7 +255,7 @@ public class GameObject {
      */
     public void draw(GL2 gl) {
         
-    	//
+    	//push matrix or just draw on global coordinates?
     	
         // don't draw if it is not showing
         if (!amShowing) {
